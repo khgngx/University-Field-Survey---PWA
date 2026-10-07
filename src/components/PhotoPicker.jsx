@@ -22,18 +22,18 @@ export default function PhotoPicker({ photo, onChange }) {
 
   return (
     <div className="space-y-3">
-      {previewUrl && <img src={previewUrl} alt="Ảnh khảo sát" className="max-h-72 w-full rounded-lg object-contain" />}
+      {previewUrl && <img src={previewUrl} alt="Ảnh khảo sát" className="max-h-72 w-full rounded-3xl bg-white object-contain" />}
       <div className="flex gap-2">
         <button
           type="button"
           onClick={capture}
           disabled={busy}
-          className="rounded-lg bg-sky-600 px-4 py-2 font-medium text-white disabled:opacity-50"
+          className="btn btn-primary"
         >
           {busy ? 'Đang xử lý…' : photo ? 'Chụp lại' : 'Chụp ảnh'}
         </button>
         {photo && (
-          <button type="button" onClick={() => onChange(undefined)} className="rounded-lg border px-4 py-2">
+          <button type="button" onClick={() => onChange(undefined)} className="btn btn-secondary">
             Xoá ảnh
           </button>
         )}

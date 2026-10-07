@@ -30,8 +30,8 @@ export default defineConfig({
         start_url: base,
         scope: base,
         display: 'standalone',
-        theme_color: '#0284c7',
-        background_color: '#ffffff',
+        theme_color: '#f2f3f1',
+        background_color: '#f2f3f1',
         // Relative paths so the icons resolve under any `base`.
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
