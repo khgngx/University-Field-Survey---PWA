@@ -5,8 +5,10 @@ import QueuePage from './pages/QueuePage.jsx'
 import SurveyWizard from './pages/SurveyWizard'
 import { startSyncTriggers } from './services/sync.service'
 
-// Chart.js is only needed on this page; it is still precached by the Service Worker for offline use.
+// Chart.js and the QR encoder are only needed on these pages; the Service Worker still precaches
+// their chunks, so both work offline.
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'))
+const QrGenerator = lazy(() => import('./pages/QrGenerator.jsx'))
 
 const navClass = ({ isActive }) =>
   `px-3 py-2 text-sm font-medium ${isActive ? 'text-white underline' : 'text-sky-100'}`
@@ -22,6 +24,7 @@ export default function App() {
             <NavLink to="/" end className={navClass}>Khảo sát</NavLink>
             <NavLink to="/queue" className={navClass}>Hàng đợi</NavLink>
             <NavLink to="/dashboard" className={navClass}>Thống kê</NavLink>
+            <NavLink to="/qr" className={navClass}>Tạo QR</NavLink>
           </nav>
         </header>
         <NetworkBanner />
@@ -31,6 +34,7 @@ export default function App() {
               <Route path="/" element={<SurveyWizard />} />
               <Route path="/queue" element={<QueuePage />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/qr" element={<QrGenerator />} />
             </Routes>
           </Suspense>
         </main>

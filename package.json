@@ -24,6 +24,8 @@
     "busboy": "^1.6.0",
     "chart.js": "^4.5.1",
     "dexie": "^4.4.6",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4"

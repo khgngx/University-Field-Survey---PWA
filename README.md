@@ -17,8 +17,22 @@ Capacitor. Mini-Project 1.1, Cross-platform Programming.
   `window.online`, Service Worker Background Sync (Chromium only), a 30 s poll, and manual buttons.
   A Web Lock keeps the main thread and the Service Worker from syncing at the same time.
 - **Idempotent server:** `POST /api/surveys` upserts by UUID, so retries and duplicate sends are safe.
-- **Extras:** QR room scan (`building|floor|room`, e.g. `A|3|A305`), 24 h duplicate detection with
-  survey versions, offline dashboard (Chart.js), local "synced N surveys" notification, GPS stamp.
+- **Extras:** room QR codes (`building|floor|room`, e.g. `A|3|A305`) — scan with the camera, upload a saved
+  QR image, or create new ones on the **Tạo QR** page; 24 h duplicate detection with survey versions,
+  offline dashboard (Chart.js), local "synced N surveys" notification, GPS stamp.
+
+## Room QR codes
+
+A QR is plain text: `building|floor|room` (three non-empty parts, each up to 50 characters, no `|` inside;
+spaces around the separator are ignored). Using the same printed code everywhere keeps room names identical,
+which matters because duplicate detection compares the three values exactly (`A305` ≠ `a305`).
+
+- **Create:** open **Tạo QR**, enter building / floor / room, then download the PNG (it includes a readable
+  caption for printing) or use **Chia sẻ** where the browser supports sharing files.
+- **Use:** in survey step 1, press **Quét QR phòng** (camera) or **Tải ảnh QR lên** (a saved image or screenshot).
+  Both work offline, and a code that is not a room QR is rejected with a message.
+- On the Android APK the web download link may not save files (WebView limitation, not yet handled);
+  show the QR on screen, take a screenshot, or use Chia sẻ if available.
 
 ## Requirements
 

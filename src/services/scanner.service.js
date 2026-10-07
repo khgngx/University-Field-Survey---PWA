@@ -18,3 +18,11 @@ export async function scanRoomQr() {
   if (!result?.ScanResult) return null
   return parseRoomQr(result.ScanResult)
 }
+
+// Reads a room QR from an uploaded/saved image instead of the live camera. Pure browser code
+// (no Capacitor), so it behaves the same in the PWA and the APK. Rejects with a readable message
+// when the file is not an image, holds no QR, or the QR is not a "toà|tầng|phòng" code.
+export async function readRoomQrFromImage(file) {
+  const { decodeQrFromImageFile } = await import('../utils/qrDecode')
+  return parseRoomQr(await decodeQrFromImageFile(file))
+}

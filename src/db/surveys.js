@@ -1,12 +1,10 @@
 import { CATEGORIES, STATUS } from '../utils/constants'
+import { MAX_LOCATION_LENGTH, MAX_NOTES_LENGTH } from '../utils/limits'
 import { db } from './database'
 
 // Fields the wizard may write while a survey is still a draft.
 export const DRAFT_FIELDS = ['building', 'floor', 'room', 'category', 'rating', 'defectNotes', 'photoBlob', 'gps', 'version']
 
-// Keep in sync with api/_lib/validate.js — the server rejects anything longer.
-export const MAX_LOCATION_LENGTH = 50
-export const MAX_NOTES_LENGTH = 2000
 export const DUPLICATE_WINDOW_MS = 24 * 60 * 60 * 1000
 
 export class SurveyValidationError extends Error {

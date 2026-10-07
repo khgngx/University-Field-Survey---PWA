@@ -1,8 +1,7 @@
 import { CATEGORIES } from '../../src/utils/categories.js'
+import { MAX_LOCATION_LENGTH, MAX_NOTES_LENGTH } from '../../src/utils/limits.js'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-const MAX_LOCATION_LENGTH = 50
-const MAX_NOTES_LENGTH = 2000
 
 const isText = (v, max) => typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max
 const inRange = (v, min, max) => typeof v === 'number' && Number.isFinite(v) && v >= min && v <= max
