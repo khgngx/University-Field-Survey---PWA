@@ -9,6 +9,16 @@ import './index.css'
 defineCustomElements(window)
 registerSW({ immediate: true })
 
+// Dev console helpers, stripped from production builds: `await seedSurveys(100)` queues sample
+// surveys; `await resetSurveys()` wipes local surveys and reloads so the wizard gets a fresh draft.
+if (import.meta.env.DEV) {
+  window.seedSurveys = async (...args) => (await import('./dev/seedSurveys.js')).seedSurveys(...args)
+  window.resetSurveys = async () => {
+    await (await import('./dev/seedSurveys.js')).clearSurveys()
+    window.location.reload()
+  }
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
