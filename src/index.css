@@ -1,1 +1,49 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-canvas: #f2f3f1;
+  --color-ink: #17191c;
+  --color-muted: #6b7280;
+  --color-brand-50: #f4fbe8;
+  --color-brand-100: #e6f6cc;
+  --color-brand-200: #d4f0a8;
+  --color-brand-400: #a8dc55;
+  --color-brand-500: #8ecf2e;
+  --color-brand-700: #4c7a12;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-white p-4;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition active:scale-[0.98] disabled:opacity-40;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn-primary {
+    @apply bg-brand-500 text-ink;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-ink ring-1 ring-black/10 ring-inset;
+  }
+
+  .field {
+    @apply w-full rounded-2xl bg-white px-4 py-3 ring-1 ring-black/5 outline-none ring-inset placeholder:text-slate-400 focus:ring-2 focus:ring-brand-500;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium;
+  }
+}

@@ -90,40 +90,40 @@ export default function QrGenerator() {
   return (
     <section className="space-y-4">
       <header>
-        <h1 className="text-xl font-semibold">Tạo QR phòng</h1>
-        <p className="text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold">Tạo QR phòng</h1>
+        <p className="mt-1 text-sm text-muted">
           Nhập thông tin một lần, tải mã QR về và dán ở phòng. Lần sau chỉ cần quét (hoặc tải ảnh QR lên) ở Bước 1 của khảo sát.
         </p>
       </header>
 
       {FIELDS.map(({ name, label, placeholder }) => (
         <label key={name} className="block">
-          <span className="mb-1 block text-sm font-medium">{label}</span>
+          <span className="field-label">{label}</span>
           <input
             value={location[name]}
             onChange={(e) => setLocation((prev) => ({ ...prev, [name]: e.target.value }))}
             placeholder={placeholder}
             maxLength={MAX_LOCATION_LENGTH}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2"
+            className="field"
           />
         </label>
       ))}
 
       {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-      {!payload && !error && <p className="text-sm text-slate-500">Nhập đủ Toà nhà, Tầng và Phòng để tạo mã QR.</p>}
+      {!payload && !error && <p className="text-sm text-muted">Nhập đủ Toà nhà, Tầng và Phòng để tạo mã QR.</p>}
 
       {payload && (
-        <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-4">
-          <canvas ref={canvasRef} aria-label={`Mã QR ${payload}`} className="mx-auto h-auto w-full max-w-xs" />
-          <p className="text-center text-sm text-slate-500">
-            Nội dung mã: <code className="rounded bg-slate-100 px-1">{payload}</code>
+        <div className="card space-y-4">
+          <canvas ref={canvasRef} aria-label={`Mã QR ${payload}`} className="mx-auto h-auto w-full max-w-xs rounded-2xl" />
+          <p className="text-center text-sm text-muted">
+            Nội dung mã: <code className="rounded-full bg-brand-100 px-2 py-0.5 text-brand-700">{payload}</code>
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            <button type="button" onClick={download} className="rounded-lg bg-sky-600 px-4 py-2 font-medium text-white">
+            <button type="button" onClick={download} className="btn btn-primary">
               Tải ảnh PNG
             </button>
             {canShareFiles && (
-              <button type="button" onClick={share} className="rounded-lg border border-sky-600 px-4 py-2 font-medium text-sky-700">
+              <button type="button" onClick={share} className="btn btn-secondary">
                 Chia sẻ
               </button>
             )}

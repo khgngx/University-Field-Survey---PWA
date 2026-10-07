@@ -1,3 +1,4 @@
+import Icon from '../../components/Icon.jsx'
 import { CATEGORIES } from '../../utils/constants'
 
 export default function Step2Category({ draft, update }) {
@@ -12,11 +13,18 @@ export default function Step2Category({ draft, update }) {
             role="radio"
             aria-checked={selected}
             onClick={() => update({ category })}
-            className={`rounded-lg border px-4 py-3 font-medium ${
-              selected ? 'border-sky-600 bg-sky-600 text-white' : 'border-slate-300 bg-white'
+            className={`flex items-center justify-between gap-2 rounded-3xl p-4 text-left font-semibold ${
+              selected ? 'bg-brand-200 ring-2 ring-brand-500 ring-inset' : 'bg-white'
             }`}
           >
             {category}
+            <span
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                selected ? 'bg-brand-500' : 'bg-canvas text-transparent'
+              }`}
+            >
+              <Icon name="check" className="h-4 w-4" />
+            </span>
           </button>
         )
       })}

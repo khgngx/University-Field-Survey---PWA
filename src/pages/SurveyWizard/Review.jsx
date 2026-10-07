@@ -13,15 +13,15 @@ export default function Review({ draft }) {
   const photoUrl = useObjectUrl(draft.photoBlob)
   return (
     <div className="space-y-4">
-      <dl className="divide-y rounded-lg border border-slate-200 bg-white">
+      <dl className="divide-y divide-slate-100 rounded-3xl bg-white">
         {ROWS.map(([label, read]) => (
-          <div key={label} className="flex justify-between gap-4 px-4 py-2">
-            <dt className="text-slate-500">{label}</dt>
+          <div key={label} className="flex justify-between gap-4 px-5 py-3">
+            <dt className="text-muted">{label}</dt>
             <dd className="text-right font-medium">{read(draft) || '—'}</dd>
           </div>
         ))}
       </dl>
-      {photoUrl && <img src={photoUrl} alt="Ảnh khảo sát" className="max-h-72 w-full rounded-lg object-contain" />}
+      {photoUrl && <img src={photoUrl} alt="Ảnh khảo sát" className="max-h-72 w-full rounded-3xl bg-white object-contain" />}
     </div>
   )
 }

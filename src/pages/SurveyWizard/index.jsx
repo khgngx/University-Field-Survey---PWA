@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SurveyValidationError, findRecentSurvey, validateForSubmit } from '../../db/surveys'
+import ProgressRing from '../../components/ProgressRing.jsx'
 import { useDraft } from '../../hooks/useDraft'
 import { getCurrentPosition } from '../../services/geo.service'
 import { requestNotificationPermission } from '../../services/notify.service'
@@ -33,7 +34,7 @@ export default function SurveyWizard() {
   if (draftError) {
     return <p role="alert" className="text-red-600">Không mở được dữ liệu cục bộ: {draftError.message}</p>
   }
-  if (!draft) return <p className="text-slate-500">Đang tải…</p>
+  if (!draft) return <p className="text-muted">Đang tải…</p>
 
   const { title, Component, requires } = STEPS[stepIndex]
   const invalid = validateForSubmit(draft)
@@ -89,9 +90,12 @@ export default function SurveyWizard() {
 
   return (
     <section className="space-y-4">
-      <header>
-        <p className="text-sm text-slate-500">Bước {stepIndex + 1}/{STEPS.length}</p>
-        <h1 className="text-xl font-semibold">{title}</h1>
+      <header className="flex items-center justify-between gap-4 rounded-3xl bg-brand-200 p-5">
+        <div>
+          <p className="text-sm font-medium text-ink/70">Bước {stepIndex + 1}/{STEPS.length}</p>
+          <h1 className="text-2xl font-semibold">{title}</h1>
+        </div>
+        <ProgressRing value={stepIndex + 1} max={STEPS.length} />
       </header>
 
       <Component draft={draft} update={update} />
@@ -99,27 +103,27 @@ export default function SurveyWizard() {
       {message && <p role="alert" className="text-sm text-red-600">{message}</p>}
 
       {duplicate ? (
-        <div role="alertdialog" aria-label="Phòng đã được khảo sát" className="space-y-3 rounded-lg border border-amber-300 bg-amber-50 p-4">
+        <div role="alertdialog" aria-label="Phòng đã được khảo sát" className="space-y-4 rounded-3xl bg-amber-50 p-5 ring-1 ring-amber-200 ring-inset">
           <p>
             Phòng này đã được khảo sát lúc {formatTime(duplicate.submittedAt ?? duplicate.createdAt)}. Tạo bản cập nhật
             (version {duplicate.version + 1}) hay huỷ?
           </p>
           <div className="flex gap-2">
-            <button type="button" onClick={createNewVersion} className="rounded-lg bg-sky-600 px-4 py-2 font-medium text-white">
+            <button type="button" onClick={createNewVersion} className="btn btn-primary">
               Tạo bản cập nhật
             </button>
-            <button type="button" onClick={() => setDuplicate(null)} className="rounded-lg border px-4 py-2">
+            <button type="button" onClick={() => setDuplicate(null)} className="btn btn-secondary">
               Huỷ
             </button>
           </div>
         </div>
       ) : (
-        <footer className="flex justify-between gap-2 pt-2">
+        <footer className="flex justify-between gap-3 pt-2">
           <button
             type="button"
             onClick={() => setStepIndex((i) => i - 1)}
             disabled={stepIndex === 0 || busy}
-            className="rounded-lg border px-4 py-2 disabled:opacity-40"
+            className="btn btn-secondary"
           >
             Quay lại
           </button>
@@ -128,7 +132,7 @@ export default function SurveyWizard() {
               type="button"
               onClick={handleSubmit}
               disabled={busy || invalid.length > 0}
-              className="rounded-lg bg-sky-600 px-4 py-2 font-medium text-white disabled:opacity-50"
+              className="btn btn-primary flex-1"
             >
               {busy ? 'Đang lưu…' : 'Gửi khảo sát'}
             </button>
@@ -137,7 +141,7 @@ export default function SurveyWizard() {
               type="button"
               onClick={handleNext}
               disabled={!canProceed}
-              className="rounded-lg bg-sky-600 px-4 py-2 font-medium text-white disabled:opacity-50"
+              className="btn btn-primary flex-1"
             >
               Tiếp tục
             </button>
