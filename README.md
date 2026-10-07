@@ -85,8 +85,10 @@ origin to `ALLOWED_ORIGINS` on the server.
 1. Repo **Settings → Pages → Source: GitHub Actions**.
 2. **Settings → Secrets and variables → Actions → Variables**: add `VITE_API_URL` =
    `https://<your-app>.vercel.app/api`.
-3. Push to `main`; `.github/workflows/deploy-gh-pages.yml` lints, tests, builds with
-   `GITHUB_PAGES=true` (served under `/University-Field-Survey---PWA/`) and publishes.
+3. Add `https://khgngx.github.io` to `ALLOWED_ORIGINS` on Vercel (the Pages site calls the Vercel API cross-origin).
+4. Push to `main`; `.github/workflows/deploy-gh-pages.yml` lints, tests, builds with
+   `GITHUB_PAGES=true` (served under `/University-Field-Survey---PWA/`) and publishes. Without step 2's
+   `VITE_API_URL` variable the workflow still runs as CI but skips the deploy job.
 
 ### Android APK
 

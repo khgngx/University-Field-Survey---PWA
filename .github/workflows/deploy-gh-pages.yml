@@ -1,6 +1,12 @@
 name: Deploy GitHub Pages
 
 # Secondary demo (frontend only). The primary deployment is Vercel, which also serves /api.
+#
+# One-time setup, otherwise the deploy job cannot succeed:
+#   1. Settings > Pages > Source: "GitHub Actions"
+#   2. Settings > Secrets and variables > Actions > Variables: VITE_API_URL = https://<vercel-domain>/api
+# Until the variable exists the build still runs as CI (lint, tests, build) and the deploy job is skipped:
+# without it the Pages build would call a relative /api on github.io, which does not exist.
 on:
   push:
     branches: [main]
@@ -19,8 +25,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -30,18 +36,18 @@ jobs:
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'
-          # Absolute URL of the Vercel API; set it under Settings > Secrets and variables > Actions > Variables.
           VITE_API_URL: ${{ vars.VITE_API_URL }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
     needs: build
+    if: ${{ vars.VITE_API_URL != '' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
