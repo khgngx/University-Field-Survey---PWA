@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { defineConfig } from 'vitest/config'
 
 // GitHub Pages serves under /<repo>/, Vercel and the Capacitor WebView serve from root.
-const base = process.env.GITHUB_PAGES ? '/University-Field-Survey---PWA/' : '/'
+const base = process.env.GITHUB_PAGES ? '/University-Field-Survey-PWA-Capacitor/' : '/'
 
 // Local demo only: forward /api to scripts/dev-api.mjs (`npm run dev:api`). Vercel serves /api in production.
 const apiProxy = { '/api': 'http://localhost:3001' }

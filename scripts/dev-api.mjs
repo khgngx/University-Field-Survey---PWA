@@ -1,6 +1,7 @@
 // Local stand-in for POST /api/surveys so the full offline -> sync flow can be demoed with no
 // Supabase account. It runs the REAL handler (same validation, multipart parsing, idempotent
-// upsert-by-id); only the storage backend is an in-memory fake. Data is lost on restart.
+// upsert-by-id). Without credentials the storage backend is an in-memory fake and data is lost on
+// restart; with SUPABASE_URL and SUPABASE_SERVICE_KEY in .env it writes to the real database.
 import http from 'node:http'
 
 const PORT = Number(process.env.DEV_API_PORT ?? 3001)
@@ -26,7 +27,8 @@ const fakeSupabase = {
     },
   }),
 }
-const handler = createSurveysHandler({ getSupabase: () => fakeSupabase })
+const useSupabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY)
+const handler = createSurveysHandler(useSupabase ? {} : { getSupabase: () => fakeSupabase })
 
 // Vercel decorates Node's response with status()/json(); do the same here.
 function decorate(res) {
@@ -58,10 +60,12 @@ const server = http.createServer(async (req, res) => {
   await handler(req, decorate(res))
   if (req.method === 'POST') {
     const verb = rows.size > before ? 'stored' : 'updated/rejected'
-    console.log(`[dev-api] POST /api/surveys -> ${res.statusCode} (${verb}; total ${rows.size})`)
+    const detail = useSupabase ? 'Supabase' : `${verb}; total ${rows.size}`
+    console.log(`[dev-api] POST /api/surveys -> ${res.statusCode} (${detail})`)
   }
 })
 
 server.listen(PORT, () => {
-  console.log(`[dev-api] listening on http://localhost:${PORT}  (inspect: /__dev/surveys)`)
+  const storage = useSupabase ? 'storage: Supabase (real database)' : 'storage: in-memory, inspect: /__dev/surveys'
+  console.log(`[dev-api] listening on http://localhost:${PORT}  (${storage})`)
 })

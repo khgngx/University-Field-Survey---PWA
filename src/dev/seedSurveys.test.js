@@ -4,7 +4,7 @@ import { db } from '../db/database'
 import { validateForSubmit } from '../db/surveys'
 import { STATUS } from '../utils/constants'
 import { summarize } from '../utils/stats'
-import { MAX_SAMPLE_SURVEYS, buildSampleSurveys, clearSurveys, seedSurveys } from './seedSurveys'
+import { MAX_SAMPLE_SURVEYS, buildSampleSurveys, clearSurveys, requeueSynced, seedSurveys } from './seedSurveys'
 
 const NOW = Date.UTC(2026, 0, 15)
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000
@@ -92,5 +92,20 @@ describe('clearSurveys', () => {
 
     expect(await db.surveys.count()).toBe(0)
     expect(await db.syncLog.count()).toBe(0)
+  })
+})
+
+describe('requeueSynced', () => {
+  it('queues synced surveys again and leaves other statuses alone', async () => {
+    await seedSurveys(3, { now: NOW })
+    const [synced, failed, pending] = await db.surveys.toArray()
+    await db.surveys.update(synced.id, { status: STATUS.SYNCED, syncedAt: NOW })
+    await db.surveys.update(failed.id, { status: STATUS.FAILED, lastError: 'boom' })
+
+    expect(await requeueSynced(NOW + 1)).toBe(1)
+
+    expect((await db.surveys.get(synced.id)).status).toBe(STATUS.PENDING_SYNC)
+    expect((await db.surveys.get(failed.id)).status).toBe(STATUS.FAILED)
+    expect((await db.surveys.get(pending.id)).status).toBe(STATUS.PENDING_SYNC)
   })
 })
