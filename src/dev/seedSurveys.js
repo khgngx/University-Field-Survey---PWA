@@ -2,7 +2,7 @@
 // so they are validated and queued for sync exactly like hand-entered ones.
 import { db } from '../db/database'
 import { createDraft, saveDraft, submitDraft } from '../db/surveys'
-import { CATEGORIES } from '../utils/constants'
+import { CATEGORIES, STATUS } from '../utils/constants'
 import { DEFECT_MAX_RATING } from '../utils/stats'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E']
@@ -90,4 +90,13 @@ export async function clearSurveys() {
     await db.surveys.clear()
     await db.syncLog.clear()
   })
+}
+
+// Puts every synced survey back in the queue, e.g. after switching the API from the in-memory
+// stand-in to the real database. Safe to repeat: the server upserts by survey id.
+export function requeueSynced(now = Date.now()) {
+  return db.surveys
+    .where('status')
+    .equals(STATUS.SYNCED)
+    .modify({ status: STATUS.PENDING_SYNC, retryCount: 0, nextRetryAt: null, lastError: null, updatedAt: now })
 }

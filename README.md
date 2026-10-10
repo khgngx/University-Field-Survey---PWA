@@ -1,4 +1,4 @@
-# University-Field-Survey---PWA
+# University-Field-Survey-PWA-Capacitor
 
 VKU Field Survey — an offline-first PWA for collecting facility surveys (classrooms, projectors, AC,
 electrical…) in basements and remote buildings with no Wi-Fi/4G, packaged as an Android APK with
@@ -83,7 +83,12 @@ stay `PENDING_SYNC` on the *Hàng đợi* page), then go back online and watch t
 the installed-PWA behaviour: the dev server does not precache the app shell, so reloading while offline only
 works on the build. Stopping `dev:api` simulates a server failure (`FAILED` + backoff, retried automatically).
 The stand-in loses its data on restart; to talk to the real API instead, set `VITE_API_URL` and add your dev
-origin to `ALLOWED_ORIGINS` on the server.
+origin to `ALLOWED_ORIGINS` on the server. Alternatively put `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` in
+`.env`: `dev:api` then writes to the real database instead of memory.
+
+In dev the browser console has `await seedSurveys(100)` (queue sample surveys), `await requeueSurveys()`
+(send already-synced surveys again, e.g. after switching to the real database) and `await resetSurveys()`
+(wipe local surveys).
 
 ## Deploy
 
@@ -101,7 +106,7 @@ origin to `ALLOWED_ORIGINS` on the server.
    `https://<your-app>.vercel.app/api`.
 3. Add `https://khgngx.github.io` to `ALLOWED_ORIGINS` on Vercel (the Pages site calls the Vercel API cross-origin).
 4. Push to `main`; `.github/workflows/deploy-gh-pages.yml` lints, tests, builds with
-   `GITHUB_PAGES=true` (served under `/University-Field-Survey---PWA/`) and publishes. Without step 2's
+   `GITHUB_PAGES=true` (served under `/University-Field-Survey-PWA-Capacitor/`) and publishes. Without step 2's
    `VITE_API_URL` variable the workflow still runs as CI but skips the deploy job.
 
 ### Android APK

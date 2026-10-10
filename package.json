@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "build:apk": "bash scripts/build-apk.sh",
-    "dev:api": "node scripts/dev-api.mjs"
+    "dev:api": "node --env-file-if-exists=.env scripts/dev-api.mjs"
   },
   "dependencies": {
     "@capacitor/barcode-scanner": "^3.1.2",
